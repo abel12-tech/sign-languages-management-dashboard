@@ -33,7 +33,7 @@ const Sidebar = ({ isSideMenuOpen }) => {
             isDarkMode ? "text-gray-200" : "text-gray-800"
           }`}
         >
-          Dahboard
+          Dashboard
         </Link>
 
         {/* Navigation links */}
