@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useDarkMode } from "../../../shared/darkModeContext";
+import { MdUpgrade } from "react-icons/md";
 
-const ManageCategories = () => {
+const ManageUsers = () => {
   const { isDarkMode, initializeDarkMode } = useDarkMode();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -55,8 +55,9 @@ const ManageCategories = () => {
                       : "text-gray-500 bg-gray-50"
                   } text-gray-500 uppercase border-b`}
                 >
-                  <th className="px-4 py-3">Name</th>
-                  <th className="px-4 py-3">Description</th>
+                  <th className="px-4 py-3">First name</th>
+                  <th className="px-4 py-3">Last name</th>
+                  <th className="px-4 py-3">User name</th>
                   <th className="px-4 py-3">Actions</th>
                 </tr>
               </thead>
@@ -71,24 +72,18 @@ const ManageCategories = () => {
                     isDarkMode ? "text-gray-400" : "text-gray-700"
                   }`}
                 >
-                  <td className="px-4 py-3">Animals</td>
-                  <td className="px-4 py-3 text-sm">Animal ...</td>
+                  <td className="px-4 py-3">Bbbb</td>
+                  <td className="px-4 py-3 text-sm">Ddd</td>
+                  <td className="px-4 py-3 text-sm">Bbb@Ddd</td>
                   <td className="px-4 py-3 text-sm">
                     <div className="flex items-center space-x-4 text-sm">
-                      <Link
-                        to="/"
-                        className="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                        aria-label="Edit"
+                      <button
+                        className="flex items-center border bg-[#9333EA] text-white justify-between px-2 py-2 text-sm font-medium leading-5 rounded-lg focus:outline-none focus:shadow-outline-gray"
+                        aria-label="upgrade-to-admin"
                       >
-                        <svg
-                          className="w-5 h-5"
-                          aria-hidden="true"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                        </svg>
-                      </Link>
+                        <MdUpgrade className="w-5 h-5" />
+                        toAdmin
+                      </button>
                       <button
                         className="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                         aria-label="Delete"
@@ -192,4 +187,4 @@ const ManageCategories = () => {
   );
 };
 
-export default ManageCategories;
+export default ManageUsers;

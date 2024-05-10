@@ -4,7 +4,7 @@ import { useDarkMode } from "../shared/darkModeContext";
 import { MdOutlineDashboard } from "react-icons/md";
 import { FaAmericanSignLanguageInterpreting } from "react-icons/fa";
 import { MdOutlineCategory } from "react-icons/md";
-
+import { FiUsers } from "react-icons/fi";
 const Sidebar = ({ isSideMenuOpen }) => {
   const [activeLink, setActiveLink] = useState("/");
   const { isDarkMode } = useDarkMode();
@@ -69,7 +69,7 @@ const Sidebar = ({ isSideMenuOpen }) => {
               ></span>
             )}
             <Link
-              to="/"
+              to="/manage-signs"
               onClick={() => handleLinkClick("/manage-signs")}
               className={`inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 ${
                 isDarkMode
@@ -90,7 +90,7 @@ const Sidebar = ({ isSideMenuOpen }) => {
               ></span>
             )}
             <Link
-              to="/"
+              to="/manage-categories"
               onClick={() => handleLinkClick("/manage-sign-category")}
               className={`inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 ${
                 isDarkMode
@@ -100,6 +100,26 @@ const Sidebar = ({ isSideMenuOpen }) => {
             >
               <MdOutlineCategory className="w-5 h-5" />
               <span className="ml-4">Manage Sign Categories</span>
+            </Link>
+          </li>
+          <li className="relative px-6 py-3">
+            {activeLink === "/manage-users" && (
+              <span
+                className="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                aria-hidden="true"
+              ></span>
+            )}
+            <Link
+              to="/manage-users"
+              onClick={() => handleLinkClick("/manage-users")}
+              className={`inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 ${
+                isDarkMode
+                  ? "dark:hover:text-gray-200"
+                  : "text-gray-800 dark:hover:text-gray-600"
+              }`}
+            >
+              <FiUsers className="w-5 h-5" />
+              <span className="ml-4">Manage Users</span>
             </Link>
           </li>
         </ul>
