@@ -1,29 +1,80 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import MainContent from "./components/MainContent";
 import Layout from "./shared/Layout";
 import ManageSigns from "./features/manage-signs/pages/ManageSigns";
 import ManageCategories from "./features/manage-categories/pages/ManageCategories";
 import ManageUsers from "./features/manage-users/pages/ManageUsers";
 import Profile from "./features/manage-users/pages/Profile";
+import AddSigns from "./features/manage-signs/pages/AddSigns";
+import AddCategory from "./features/manage-categories/pages/AddCategory";
+import ManageSignContributed from "./features/manage-contributions/pages/ManageSignContributed";
+import Login from "./features/authentication/pages/Login";
+import { selectIsAuthenticated } from "./features/authentication/slice/authSlice";
+import { useSelector } from "react-redux";
 
 const App = () => {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   return (
     <Routes>
       <Route
         path="/"
         element={
-          <Layout>
-            <MainContent />
-          </Layout>
+          isAuthenticated ? (
+            <Layout>
+              <MainContent />
+            </Layout>
+          ) : (
+            <Navigate to="/login" replace />
+          )
         }
       />
       <Route
         path="/manage-signs"
         element={
-          <Layout>
-            <ManageSigns />
-          </Layout>
+          isAuthenticated ? (
+            <Layout>
+              <ManageSigns />
+            </Layout>
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route
+        path="/manage-sign-contributed"
+        element={
+          isAuthenticated ? (
+            <Layout>
+              <ManageSignContributed />
+            </Layout>
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route
+        path="/add-sign"
+        element={
+          isAuthenticated ? (
+            <Layout>
+              <AddSigns />
+            </Layout>
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route
+        path="/add-category"
+        element={
+          isAuthenticated ? (
+            <Layout>
+              <AddCategory />
+            </Layout>
+          ) : (
+            <Navigate to="/login" replace />
+          )
         }
       />
       <Route
@@ -37,19 +88,28 @@ const App = () => {
       <Route
         path="/manage-users"
         element={
-          <Layout>
-            <ManageUsers />
-          </Layout>
+          isAuthenticated ? (
+            <Layout>
+              <ManageUsers />
+            </Layout>
+          ) : (
+            <Navigate to="/login" replace />
+          )
         }
       />
       <Route
         path="/profile"
         element={
-          <Layout>
-            <Profile />
-          </Layout>
+          isAuthenticated ? (
+            <Layout>
+              <Profile />
+            </Layout>
+          ) : (
+            <Navigate to="/login" replace />
+          )
         }
       />
+      <Route path="/login" element={<Login />} />
     </Routes>
   );
 };

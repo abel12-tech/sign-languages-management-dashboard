@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { FcApprove } from "react-icons/fc";
 import { useDarkMode } from "../../../shared/darkModeContext";
 
-const ManageSigns = () => {
+const ManageSignContributed = () => {
   const { isDarkMode, initializeDarkMode } = useDarkMode();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -45,16 +45,6 @@ const ManageSigns = () => {
     >
       <div className="flex flex-col flex-1 w-full">
         <div className="w-full container h-screen mt-8 p-6 rounded-lg shadow-xs">
-        <div className="flex justify-end mt-4 mb-4">
-            <Link
-              to="/add-sign"
-              className={`items ${
-                isDarkMode ? "text-gray-300" : "text-gray-100"
-              } bg-[#9333EA] px-3 py-2 rounded`}
-            >
-              Add Sign
-            </Link>
-          </div>
           <div className="w-full overflow-x-auto">
             <table className="w-full whitespace-no-wrap">
               <thead>
@@ -106,20 +96,13 @@ const ManageSigns = () => {
                   <td className="px-4 py-3 text-sm">Har'a</td>
                   <td className="px-4 py-3 text-sm">
                     <div className="flex items-center space-x-4 text-sm">
-                      <Link
-                        to="/"
-                        className="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                        aria-label="Edit"
+                      <button
+                        className="flex items-center border bg-[#9333EA] text-white justify-between px-2 py-2 text-sm font-medium leading-5 rounded-lg focus:outline-none focus:shadow-outline-gray"
+                        aria-label="upgrade-to-admin"
                       >
-                        <svg
-                          className="w-5 h-5"
-                          aria-hidden="true"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                        </svg>
-                      </Link>
+                        <FcApprove className="w-5 h-5" />
+                        approve
+                      </button>
                       <button
                         className="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                         aria-label="Delete"
@@ -223,4 +206,4 @@ const ManageSigns = () => {
   );
 };
 
-export default ManageSigns;
+export default ManageSignContributed;

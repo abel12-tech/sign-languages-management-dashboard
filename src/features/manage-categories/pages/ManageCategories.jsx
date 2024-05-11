@@ -45,6 +45,16 @@ const ManageCategories = () => {
     >
       <div className="flex flex-col flex-1 w-full">
         <div className="w-full container h-screen mt-8 p-6 rounded-lg shadow-xs">
+          <div className="flex justify-end mt-4 mb-4">
+            <Link
+              to="/add-category"
+              className={`items ${
+                isDarkMode ? "text-gray-300" : "text-gray-100"
+              } bg-[#9333EA] px-3 py-2 rounded`}
+            >
+              Add Category
+            </Link>
+          </div>
           <div className="w-full overflow-x-auto">
             <table className="w-full whitespace-no-wrap">
               <thead>
