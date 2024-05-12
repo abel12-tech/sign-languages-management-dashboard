@@ -16,15 +16,14 @@ const AddSigns = () => {
   const navigate = useNavigate();
   const [addSign] = useAddSignMutation();
   const { data: categories, isLoading, isError } = useGetAllCategoriesQuery();
-  console.log(categories)
 
   useEffect(() => {
     initializeDarkMode();
   }, [initializeDarkMode]);
 
   useEffect(() => {
-    if (!isLoading && categories.length > 0) {
-      setSelectedCategory(categories[0].id);
+    if (!isLoading && categories?.data.length > 0) {
+      setSelectedCategory(categories.data[0]._id);
     }
   }, [isLoading, categories]);
 
@@ -33,7 +32,7 @@ const AddSigns = () => {
     setAdding(true);
 
     try {
-      const imageRef = ref(storage, `Sign-images/${image.name + v4()}`);
+      const imageRef = ref(storage, `Signs/${image.name + v4()}`);
       await uploadBytes(imageRef, image);
       const imageUrl = await getDownloadURL(imageRef);
 
@@ -44,7 +43,8 @@ const AddSigns = () => {
       });
 
       setAdding(false);
-      navigate("/navigate-to-some-route"); // Replace with your desired route
+      navigate("/manage-added-signs");
+      window.location.reload();
     } catch (error) {
       console.error("Error adding sign:", error);
       setAdding(false);
@@ -114,8 +114,8 @@ const AddSigns = () => {
                     ) : isError ? (
                       <option>Error loading categories</option>
                     ) : (
-                      categories.map((category) => (
-                        <option key={category.id} value={category.id}>
+                      categories?.data.map((category) => (
+                        <option key={category._id} value={category._id}>
                           {category.name}
                         </option>
                       ))
