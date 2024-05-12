@@ -66,7 +66,7 @@ const Sidebar = ({ isSideMenuOpen }) => {
         {/* More navigation links */}
         <ul>
           <li className="relative px-6 py-3">
-            {activeLink === "/manage-signs" && (
+            {activeLink === "/manage-added-signs" && (
               <span
                 className="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
                 aria-hidden="true"

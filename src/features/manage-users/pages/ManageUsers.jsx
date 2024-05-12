@@ -37,9 +37,14 @@ const ManageUsers = () => {
   };
 
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, users?.data.users.length);
+  const endIndex = Math.min(
+    startIndex + itemsPerPage,
+    users?.data.users.length
+  );
 
-  const showingText = `Showing ${startIndex + 1}-${endIndex} of ${users?.data.users.length}`;
+  const showingText = `Showing ${startIndex + 1}-${endIndex} of ${
+    users?.data.users.length
+  }`;
 
   return (
     <div
@@ -59,8 +64,6 @@ const ManageUsers = () => {
                       : "text-gray-500 bg-gray-50"
                   } text-gray-500 uppercase border-b`}
                 >
-                  <th className="px-4 py-3">First name</th>
-                  <th className="px-4 py-3">Last name</th>
                   <th className="px-4 py-3">User name</th>
                   <th className="px-4 py-3">Actions</th>
                 </tr>
@@ -88,8 +91,6 @@ const ManageUsers = () => {
                         isDarkMode ? "text-gray-400" : "text-gray-700"
                       }`}
                     >
-                      <td className="px-4 py-3 text-sm">{user.firstName}</td>
-                      <td className="px-4 py-3 text-sm">{user.lastName}</td>
                       <td className="px-4 py-3 text-sm">{user.username}</td>
                       <td className="px-4 py-3 text-sm">
                         <div className="flex items-center space-x-4 text-sm">

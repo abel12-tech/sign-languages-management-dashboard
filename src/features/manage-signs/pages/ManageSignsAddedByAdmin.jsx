@@ -7,6 +7,7 @@ const ManageSignsAddedByAdmin = () => {
   const { isDarkMode, initializeDarkMode } = useDarkMode();
   const [currentPage, setCurrentPage] = useState(1);
   const { data: signs, isLoading, isSuccess } = useGetSignAddedByAdminQuery();
+  
 
   const itemsPerPage = 5;
 
