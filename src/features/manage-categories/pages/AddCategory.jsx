@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDarkMode } from "../../../shared/darkModeContext";
+import { useAddCategoryMutation } from "../api/categoriesApi";
+import { storage } from "../../../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { v4 } from "uuid";
 
 const AddCategory = () => {
   const { isDarkMode, initializeDarkMode } = useDarkMode();
   const [adding, setAdding] = useState(false);
+  const [image, setImage] = useState(null);
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
+  const [addCategory] = useAddCategoryMutation();
 
   useEffect(() => {
     initializeDarkMode();
@@ -16,6 +22,24 @@ const AddCategory = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setAdding(true);
+
+    try {
+      const imageRef = ref(storage, `Category-images/${image.name + v4()}`);
+      await uploadBytes(imageRef, image);
+      const imageUrl = await getDownloadURL(imageRef);
+
+      const res = await addCategory({
+        name: category,
+        description: description,
+        image: imageUrl,
+      });
+
+      setAdding(false);
+      navigate("/navigate-to-some-route"); 
+    } catch (error) {
+      console.error("Error adding category:", error);
+      setAdding(false);
+    }
   };
 
   return (
@@ -40,6 +64,25 @@ const AddCategory = () => {
                   isDarkMode ? "bg-gray-800" : "bg-white"
                 } rounded-lg shadow-md`}
               >
+                <label className="block text-sm">
+                  <span
+                    className={`${
+                      isDarkMode ? "text-gray-400" : "text-gray-700"
+                    }`}
+                  >
+                    Image
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className={`${
+                      isDarkMode
+                        ? "border-gray-600 bg-gray-700 text-gray-300 focus:shadow-outline-gray"
+                        : "border-2 outline-none focus:border-gray-200"
+                    } focus:border-gray-400 focus:outline-none focus:shadow-outline-purple sm:col-span-2 text-sm rounded-lg outline-none block w-full p-2.5`}
+                    onChange={(e) => setImage(e.target.files[0])}
+                  />
+                </label>
                 <label className="block mt-4 text-sm">
                   <span
                     className={`${
@@ -54,7 +97,7 @@ const AddCategory = () => {
                         ? "border-gray-600 bg-gray-700 text-gray-300 focus:shadow-outline-gray"
                         : "border-2 outline-none focus:border-gray-200"
                     } focus:border-gray-400 focus:outline-none focus:shadow-outline-purple sm:col-span-2 text-sm rounded-lg outline-none block w-full p-2.5`}
-                    placeholder="category name"
+                    placeholder="Category Name"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                   />
@@ -74,7 +117,7 @@ const AddCategory = () => {
                         : "border-2 outline-none focus:border-gray-200"
                     } focus:border-gray-400 focus:outline-none focus:shadow-outline-purple sm:col-span-2 text-sm rounded-lg outline-none block w-full p-2.5`}
                     rows={3}
-                    placeholder="description"
+                    placeholder="Description"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                   />
@@ -83,7 +126,7 @@ const AddCategory = () => {
                   type="submit"
                   className="mt-4 bg-[#9333EA] hover:bg-[#c190ee] text-white font-semibold py-2 px-4 rounded"
                 >
-                  {adding ? "adding ..." : "Add Category"}
+                  {adding ? "Adding..." : "Add Category"}
                 </button>
               </div>
             </form>
