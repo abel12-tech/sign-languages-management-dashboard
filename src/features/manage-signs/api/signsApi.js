@@ -19,6 +19,14 @@ export const signsApi = createApi({
       query: () => "/signs/",
       method: "GET",
     }),
+    getSignAddedByAdmin: builder.query({
+      query: () => "/signs/added-by-admin",
+      method: "GET",
+    }),
+    getSignAddedByUser: builder.query({
+      query: () => "/signs/added-by-user",
+      method: "GET",
+    }),
     getSignById: builder.query({
       query: (id) => `/signs/${id}`,
       method: "GET",
@@ -26,4 +34,9 @@ export const signsApi = createApi({
   }),
 });
 
-export const { useGetAllSignsQuery, useGetSignByIdQuery } = signsApi;
+export const {
+  useGetAllSignsQuery,
+  useGetSignByIdQuery,
+  useGetSignAddedByAdminQuery,
+  useGetSignAddedByUserQuery,
+} = signsApi;

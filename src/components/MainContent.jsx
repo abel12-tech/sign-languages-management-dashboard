@@ -4,9 +4,11 @@ import { FaAmericanSignLanguageInterpreting } from "react-icons/fa";
 import { MdOutlineCategory } from "react-icons/md";
 import { FcApprove } from "react-icons/fc";
 import { SiContributorcovenant } from "react-icons/si";
+import { useGetAllDataQuery } from "../features/dashboard-summary/api/dataApi";
 
 const MainContent = () => {
   const { isDarkMode, initializeDarkMode } = useDarkMode();
+  const { data: datas, isSuccess } = useGetAllDataQuery();
 
   useEffect(() => {
     initializeDarkMode();
@@ -52,7 +54,7 @@ const MainContent = () => {
                   isDarkMode ? "text-gray-200" : "text-gray-700"
                 }`}
               >
-                20
+                {isSuccess ? datas.data.totalSigns : "Loading..."}
               </p>
             </div>
           </div>
@@ -78,7 +80,7 @@ const MainContent = () => {
                   isDarkMode ? "text-gray-200" : "text-gray-700"
                 }`}
               >
-                10
+                {isSuccess ? datas.data.totalCategories : "Loading..."}
               </p>
             </div>
           </div>
@@ -104,7 +106,7 @@ const MainContent = () => {
                   isDarkMode ? "text-gray-200" : "text-gray-700"
                 }`}
               >
-                5
+                {isSuccess ? datas.data.totalApprovedSigns : "Loading..."}
               </p>
             </div>
           </div>
@@ -130,7 +132,7 @@ const MainContent = () => {
                   isDarkMode ? "text-gray-200" : "text-gray-700"
                 }`}
               >
-                20
+                {isSuccess ? datas.data.totalContributedSigns : "Loading..."}
               </p>
             </div>
           </div>

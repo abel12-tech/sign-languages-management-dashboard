@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import MainContent from "./components/MainContent";
 import Layout from "./shared/Layout";
-import ManageSigns from "./features/manage-signs/pages/ManageSigns";
+import ManageSigns from "./features/manage-signs/pages/ManageSignsAddedByAdmin";
 import ManageCategories from "./features/manage-categories/pages/ManageCategories";
 import ManageUsers from "./features/manage-users/pages/ManageUsers";
 import Profile from "./features/manage-users/pages/Profile";
@@ -12,6 +12,8 @@ import ManageSignContributed from "./features/manage-contributions/pages/ManageS
 import Login from "./features/authentication/pages/Login";
 import { selectIsAuthenticated } from "./features/authentication/slice/authSlice";
 import { useSelector } from "react-redux";
+import ManageContributedSigns from "./features/manage-signs/pages/ManageContributedSigns";
+import ManageSignsAddedByAdmin from "./features/manage-signs/pages/ManageSignsAddedByAdmin";
 
 const App = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -30,11 +32,11 @@ const App = () => {
         }
       />
       <Route
-        path="/manage-signs"
+        path="/manage-added-signs"
         element={
           isAuthenticated ? (
             <Layout>
-              <ManageSigns />
+              <ManageSignsAddedByAdmin />
             </Layout>
           ) : (
             <Navigate to="/login" replace />
@@ -46,7 +48,7 @@ const App = () => {
         element={
           isAuthenticated ? (
             <Layout>
-              <ManageSignContributed />
+              <ManageContributedSigns />
             </Layout>
           ) : (
             <Navigate to="/login" replace />

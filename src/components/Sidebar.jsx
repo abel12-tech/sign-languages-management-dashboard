@@ -6,6 +6,9 @@ import { FaAmericanSignLanguageInterpreting } from "react-icons/fa";
 import { MdOutlineCategory } from "react-icons/md";
 import { SiContributorcovenant } from "react-icons/si";
 import { FiUsers } from "react-icons/fi";
+import { FcFeedback } from "react-icons/fc";
+import { RiFeedbackLine } from "react-icons/ri";
+
 const Sidebar = ({ isSideMenuOpen }) => {
   const [activeLink, setActiveLink] = useState("/");
   const { isDarkMode } = useDarkMode();
@@ -70,8 +73,8 @@ const Sidebar = ({ isSideMenuOpen }) => {
               ></span>
             )}
             <Link
-              to="/manage-signs"
-              onClick={() => handleLinkClick("/manage-signs")}
+              to="/manage-added-signs"
+              onClick={() => handleLinkClick("/manage-added-signs")}
               className={`inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 ${
                 isDarkMode
                   ? "dark:hover:text-gray-200"
@@ -79,8 +82,7 @@ const Sidebar = ({ isSideMenuOpen }) => {
               }`}
             >
               <FaAmericanSignLanguageInterpreting className="w-6 h-6" />
-              <span className="ml-4">Manage Approved and Added
-               Signs</span>
+              <span className="ml-4">Manage Approved and Added Signs</span>
             </Link>
           </li>
 
@@ -143,6 +145,46 @@ const Sidebar = ({ isSideMenuOpen }) => {
             >
               <FiUsers className="w-5 h-5" />
               <span className="ml-4">Manage Users</span>
+            </Link>
+          </li>
+          <li className="relative px-6 py-3">
+            {activeLink === "/manage-feedback" && (
+              <span
+                className="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                aria-hidden="true"
+              ></span>
+            )}
+            <Link
+              to="/manage-feedback"
+              onClick={() => handleLinkClick("/manage-feedback")}
+              className={`inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 ${
+                isDarkMode
+                  ? "dark:hover:text-gray-200"
+                  : "text-gray-800 dark:hover:text-gray-600"
+              }`}
+            >
+              <FcFeedback className="w-5 h-5" />
+              <span className="ml-4">Manage Feedback</span>
+            </Link>
+          </li>
+          <li className="relative px-6 py-3">
+            {activeLink === "/manage-reported-issues" && (
+              <span
+                className="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                aria-hidden="true"
+              ></span>
+            )}
+            <Link
+              to="/manage-reported-issues"
+              onClick={() => handleLinkClick("/manage-reported-issues")}
+              className={`inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 ${
+                isDarkMode
+                  ? "dark:hover:text-gray-200"
+                  : "text-gray-800 dark:hover:text-gray-600"
+              }`}
+            >
+              <RiFeedbackLine className="w-5 h-5" />
+              <span className="ml-4">Manage Reported Issue</span>
             </Link>
           </li>
         </ul>
