@@ -31,6 +31,34 @@ export const signsApi = createApi({
       query: (id) => `/signs/${id}`,
       method: "GET",
     }),
+    addSign: builder.mutation({
+      query: (data) => ({
+        url: "/signs",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    updateSign: builder.mutation({
+      query: (data) => ({
+        url: `/signs/${data._id}/`,
+        method: "PATCH",
+        body: data,
+      }),
+    }),
+    approveSign: builder.mutation({
+      query: (id) => ({
+        url: `/signs/${id}/approve`,
+        method: "PATCH",
+        body: id,
+      }),
+    }),
+    rejectSign: builder.mutation({
+      query: (id) => ({
+        url: `/signs/${id}/reject`,
+        method: "PATCH",
+        body: id,
+      }),
+    }),
   }),
 });
 
@@ -39,4 +67,8 @@ export const {
   useGetSignByIdQuery,
   useGetSignAddedByAdminQuery,
   useGetSignAddedByUserQuery,
+  useAddSignMutation,
+  useUpdateSignMutation,
+  useApproveSignMutation,
+  useRejectSignMutation,
 } = signsApi;

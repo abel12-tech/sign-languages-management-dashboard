@@ -19,7 +19,7 @@ const ManageSignsAddedByAdmin = () => {
     initializeDarkMode();
   }, [initializeDarkMode]);
 
-  const totalPages = Math.ceil(5 / itemsPerPage) || 1;
+  const totalPages = Math.ceil(signs?.data.length/ itemsPerPage) || 1;
   const goToPreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prevPage) => prevPage - 1);
@@ -37,9 +37,9 @@ const ManageSignsAddedByAdmin = () => {
   };
 
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, 5);
+  const endIndex = Math.min(startIndex + itemsPerPage, signs?.data.length);
 
-  const showingText = `Showing ${startIndex + 1}-${endIndex} of ${5}`;
+  const showingText = `Showing ${startIndex + 1}-${endIndex} of ${signs?.data.length}`;
 
   return (
     <div
@@ -99,7 +99,7 @@ const ManageSignsAddedByAdmin = () => {
                     >
                       <td className="px-4 py-3">
                         <div className="flex items-center text-sm">
-                          <div className="relative hidden w-16 h-8 mr-3  md:block">
+                          <div className="relative hidden w-28 h-14 mr-3  md:block">
                             <img
                               className="object-cover w-full h-full "
                               src={sign.image}
@@ -123,7 +123,7 @@ const ManageSignsAddedByAdmin = () => {
                       <td className="px-4 py-3 text-sm">
                         <div className="flex items-center space-x-4 text-sm">
                           <Link
-                            to={`/edit-sign/${sign._id}`}
+                            to={`/update-sign/${sign._id}`}
                             className="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                             aria-label="Edit"
                           >

@@ -20,11 +20,29 @@ export const categoriesApi = createApi({
       method: "GET",
     }),
     getCategoryById: builder.query({
-      query: (id) => `/signs/${id}`,
+      query: (id) => `/categories/${id}`,
       method: "GET",
+    }),
+    addCategory: builder.mutation({
+      query: (data) => ({
+        url: "/categories",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    updateCategory: builder.mutation({
+      query: (data) => ({
+        url: `/categories/${data._id}/`,
+        method: "PATCH",
+        body: data,
+      }),
     }),
   }),
 });
 
-export const { useGetAllCategoriesQuery, useGetCategoryByIdQuery } =
-  categoriesApi;
+export const {
+  useGetAllCategoriesQuery,
+  useGetCategoryByIdQuery,
+  useAddCategoryMutation,
+  useUpdateCategoryMutation,
+} = categoriesApi;

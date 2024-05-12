@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDarkMode } from "../shared/darkModeContext";
+import { logout } from "../features/authentication/slice/authSlice";
+import { useDispatch } from "react-redux";
 
 const Header = ({ toggleSideMenu }) => {
   const { isDarkMode, toggleDarkMode, initializeDarkMode } = useDarkMode();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     initializeDarkMode();
   }, [initializeDarkMode]);
+
+  const onLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
 
   const toggleTheme = () => {
     return toggleDarkMode();
@@ -128,8 +137,12 @@ const Header = ({ toggleSideMenu }) => {
                     <span>Profile</span>
                   </Link>
                 </li>
+
                 <li className="flex">
-                  <button className="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200">
+                  <button
+                    className="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                    onClick={onLogout}
+                  >
                     <svg
                       className="w-4 h-4 mr-3"
                       aria-hidden="true"

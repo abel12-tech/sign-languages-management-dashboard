@@ -1,24 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDarkMode } from "../../../shared/darkModeContext";
+import { storage } from "../../../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { v4 } from "uuid";
+import { useAddSignMutation } from "../api/signsApi";
+import { useGetAllCategoriesQuery } from "../../manage-categories/api/categoriesApi";
 
 const AddSigns = () => {
   const { isDarkMode, initializeDarkMode } = useDarkMode();
   const [adding, setAdding] = useState(false);
   const [image, setImage] = useState(null);
-  const [category, setCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [meaning, setMeaning] = useState("");
   const navigate = useNavigate();
+  const [addSign] = useAddSignMutation();
+  const { data: categories, isLoading, isError } = useGetAllCategoriesQuery();
+  console.log(categories)
 
   useEffect(() => {
     initializeDarkMode();
   }, [initializeDarkMode]);
 
+  useEffect(() => {
+    if (!isLoading && categories.length > 0) {
+      setSelectedCategory(categories[0].id);
+    }
+  }, [isLoading, categories]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setAdding(true);
 
-    // Add your form submission logic here
+    try {
+      const imageRef = ref(storage, `Sign-images/${image.name + v4()}`);
+      await uploadBytes(imageRef, image);
+      const imageUrl = await getDownloadURL(imageRef);
+
+      await addSign({
+        category: selectedCategory,
+        meaning: meaning,
+        image: imageUrl,
+      });
+
+      setAdding(false);
+      navigate("/navigate-to-some-route"); // Replace with your desired route
+    } catch (error) {
+      console.error("Error adding sign:", error);
+      setAdding(false);
+    }
   };
 
   return (
@@ -70,16 +100,27 @@ const AddSigns = () => {
                   >
                     Category
                   </span>
-                  <input
+                  <select
                     className={`${
                       isDarkMode
                         ? "border-gray-600 bg-gray-700 text-gray-300 focus:shadow-outline-gray"
                         : "border-2 outline-none focus:border-gray-200"
                     } focus:border-gray-400 focus:outline-none focus:shadow-outline-purple sm:col-span-2 text-sm rounded-lg outline-none block w-full p-2.5`}
-                    placeholder="category name"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                  />
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                  >
+                    {isLoading ? (
+                      <option>Loading...</option>
+                    ) : isError ? (
+                      <option>Error loading categories</option>
+                    ) : (
+                      categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))
+                    )}
+                  </select>
                 </label>
                 <label className="block mt-4 text-sm">
                   <span
@@ -104,7 +145,7 @@ const AddSigns = () => {
                   type="submit"
                   className="mt-4 bg-[#9333EA] hover:bg-[#c190ee] text-white font-semibold py-2 px-4 rounded"
                 >
-                  {adding ? "adding ..." : "Add Sign"}
+                  {adding ? "Adding..." : "Add Sign"}
                 </button>
               </div>
             </form>

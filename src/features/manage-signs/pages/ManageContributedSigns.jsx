@@ -1,13 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { useDarkMode } from "../../../shared/darkModeContext";
-import { useGetSignAddedByUserQuery } from "../api/signsApi";
+import {
+  useApproveSignMutation,
+  useGetSignAddedByUserQuery,
+  useRejectSignMutation,
+} from "../api/signsApi";
 import { FcApprove } from "react-icons/fc";
+import { FcCancel } from "react-icons/fc";
 
 const ManageContributedSigns = () => {
   const { isDarkMode, initializeDarkMode } = useDarkMode();
   const [currentPage, setCurrentPage] = useState(1);
   const { data: signs, isLoading, isSuccess } = useGetSignAddedByUserQuery();
- 
+  const [approveSign] = useApproveSignMutation();
+  const [rejectSign] = useRejectSignMutation();
+
+  const onApproveSign = async (id) => {
+    try {
+      await approveSign(id).unwrap();
+      window.location.reload();
+    } catch (error) {
+      console.error("Error approving:", error);
+    }
+  };
+
+  const onRejectSign = async (id) => {
+    try {
+      await rejectSign(id).unwrap();
+      window.location.reload();
+    } catch (error) {
+      console.error("Error approving:", error);
+    }
+  };
 
   const itemsPerPage = 5;
 
@@ -19,7 +43,7 @@ const ManageContributedSigns = () => {
     initializeDarkMode();
   }, [initializeDarkMode]);
 
-  const totalPages = Math.ceil(5 / itemsPerPage) || 1;
+  const totalPages = Math.ceil(signs?.data.length / itemsPerPage) || 1;
   const goToPreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prevPage) => prevPage - 1);
@@ -37,9 +61,11 @@ const ManageContributedSigns = () => {
   };
 
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, 5);
+  const endIndex = Math.min(startIndex + itemsPerPage, signs?.data.length);
 
-  const showingText = `Showing ${startIndex + 1}-${endIndex} of ${5}`;
+  const showingText = `Showing ${startIndex + 1}-${endIndex} of ${
+    signs?.data.length
+  }`;
 
   return (
     <div
@@ -89,9 +115,9 @@ const ManageContributedSigns = () => {
                     >
                       <td className="px-4 py-3">
                         <div className="flex items-center text-sm">
-                          <div className="relative hidden w-16 h-8 mr-3  md:block">
+                          <div className="relative hidden w-28 h-14 mr-3  md:block">
                             <img
-                              className="object-cover w-full h-full "
+                              className="object-cover w-full h-full"
                               src={sign.image}
                               alt={sign.meaning}
                               loading="lazy"
@@ -116,39 +142,59 @@ const ManageContributedSigns = () => {
                             <button
                               className="flex items-center border bg-[#9333EA] text-white justify-between px-2 py-2 text-sm font-medium leading-5 rounded-lg focus:outline-none focus:shadow-outline-gray"
                               aria-label="upgrade-to-admin"
+                              onClick={() => onApproveSign(sign._id)}
                             >
                               <FcApprove className="w-5 h-5" />
                               approve
                             </button>
                             <button
-                              className="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                              aria-label="Delete"
-                              onClick={() => onDelete(sign._id)}
+                              className="flex items-center border bg-[#9333EA] text-white justify-between px-2 py-2 text-sm font-medium leading-5 rounded-lg focus:outline-none focus:shadow-outline-gray"
+                              aria-label="upgrade-to-admin"
+                              onClick={() => onRejectSign(sign._id)}
                             >
-                              <svg
-                                className="w-5 h-5"
-                                aria-hidden="true"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
+                              <FcCancel className="w-5 h-5" />
+                              reject
                             </button>
                           </div>
                         </td>
                       ) : (
                         <td className="px-4 py-3 text-sm">
                           <div className="flex items-center space-x-4 text-sm">
-                            <button
-                              className="flex items-center border bg-green-300 text-black justify-between px-2 py-2 text-sm font-medium leading-5 rounded-lg focus:outline-none focus:shadow-outline-gray"
-                              aria-label="upgrade-to-admin"
-                            >
-                              approved sign
-                            </button>
+                            {sign.status === "approved" ? (
+                              <div className="flex items-center space-x-4 text-sm">
+                                <button
+                                  className="flex items-center border bg-green-300 text-black justify-between px-2 py-2 text-sm font-medium leading-5 rounded-lg focus:outline-none focus:shadow-outline-gray"
+                                  aria-label="upgrade-to-admin"
+                                >
+                                  approved sign
+                                </button>
+                                <button
+                                  className="flex items-center border bg-[#9333EA] text-white justify-between px-2 py-2 text-sm font-medium leading-5 rounded-lg focus:outline-none focus:shadow-outline-gray"
+                                  aria-label="upgrade-to-admin"
+                                  onClick={() => onRejectSign(sign._id)}
+                                >
+                                  <FcCancel className="w-5 h-5" />
+                                  reject
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="flex items-center space-x-4 text-sm">
+                                <button
+                                  className="flex items-center border bg-red-300 text-black justify-between px-2 py-2 text-sm font-medium leading-5 rounded-lg focus:outline-none focus:shadow-outline-gray"
+                                  aria-label="upgrade-to-admin"
+                                >
+                                  rejected sign
+                                </button>
+                                <button
+                                  className="flex items-center border bg-[#9333EA] text-white justify-between px-2 py-2 text-sm font-medium leading-5 rounded-lg focus:outline-none focus:shadow-outline-gray"
+                                  aria-label="upgrade-to-admin"
+                                  onClick={() => onApproveSign(sign._id)}
+                                >
+                                  <FcApprove className="w-5 h-5" />
+                                  approve
+                                </button>
+                              </div>
+                            )}
                           </div>
                         </td>
                       )}
