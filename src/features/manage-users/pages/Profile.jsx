@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDarkMode } from "../../../shared/darkModeContext";
-import { Link } from "react-router-dom";
+import profile from "../../../assets/avatar.jpeg"
 
 const Profile = () => {
   const { isDarkMode, initializeDarkMode } = useDarkMode();
@@ -34,7 +34,7 @@ const Profile = () => {
           </div>
           <div className="flex items-center justify-center -mt-16">
             <img
-              src="."
+              src={profile}
               alt="Profile"
               className="w-32 object-cover h-32 rounded-full border-4 border-white shadow-md"
             />
@@ -42,13 +42,6 @@ const Profile = () => {
           <div className="text-center mt-4">
             <h1 className="text-2xl font-bold text-gray-500">Admin</h1>
             <p className="text-gray-500">Admin for managing the signs</p>
-          </div>
-          <div className="mt-6">
-            <Link to="./">
-              <button className="w-full bg-[#9333EA] hover:bg-[#c190ee] text-white font-semibold py-2 px-4 rounded">
-                Update Profile
-              </button>
-            </Link>
           </div>
         </div>
       </div>
