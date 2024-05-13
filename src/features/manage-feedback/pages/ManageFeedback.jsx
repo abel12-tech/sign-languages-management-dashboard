@@ -1,28 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { useDarkMode } from "../../../shared/darkModeContext";
-import { useDeleteUserMutation, useGetAllUsersQuery } from "../api/usersApi";
+import {
+  useDeleteFeedbackMutation,
+  useGetFeedbacksQuery,
+} from "../api/feedbackApi";
 
-const ManageUsers = () => {
+const ManageFeedback = () => {
   const { isDarkMode, initializeDarkMode } = useDarkMode();
+  const { data: feedbacks, isLoading, isSuccess } = useGetFeedbacksQuery();
+  const [deleteFeedback] = useDeleteFeedbackMutation();
+
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: users, isLoading, isSuccess } = useGetAllUsersQuery();
-  const [deleteUser] = useDeleteUserMutation();
 
   const itemsPerPage = 5;
 
   const onDelete = async (id) => {
     try {
-      await deleteUser(id).unwrap();
+      await deleteFeedback(id).unwrap();
       window.location.reload();
     } catch (error) {
       console.error("Error deleting:", error);
     }
   };
+
   useEffect(() => {
     initializeDarkMode();
   }, [initializeDarkMode]);
 
-  const totalPages = Math.ceil(users?.data.users.length / itemsPerPage) || 1;
+  const totalPages = Math.ceil(feedbacks?.data.length / itemsPerPage) || 1;
   const goToPreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prevPage) => prevPage - 1);
@@ -40,13 +45,10 @@ const ManageUsers = () => {
   };
 
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(
-    startIndex + itemsPerPage,
-    users?.data.users.length
-  );
+  const endIndex = Math.min(startIndex + itemsPerPage, feedbacks?.data.length);
 
   const showingText = `Showing ${startIndex + 1}-${endIndex} of ${
-    users?.data.users.length
+    feedbacks?.data.length
   }`;
 
   return (
@@ -67,7 +69,7 @@ const ManageUsers = () => {
                       : "text-gray-500 bg-gray-50"
                   } text-gray-500 uppercase border-b`}
                 >
-                  <th className="px-4 py-3">User name</th>
+                  <th className="px-4 py-3">Message</th>
                   <th className="px-4 py-3">Actions</th>
                 </tr>
               </thead>
@@ -87,38 +89,42 @@ const ManageUsers = () => {
                     </td>
                   </tr>
                 ) : isSuccess ? (
-                  users?.data.users.slice(startIndex, endIndex).map((user) => (
-                    <tr
-                      key={user._id}
-                      className={`${
-                        isDarkMode ? "text-gray-400" : "text-gray-700"
-                      }`}
-                    >
-                      <td className="px-4 py-3 text-sm">{user.username}</td>
-                      <td className="px-4 py-3 text-sm">
-                        <div className="flex items-center space-x-4 text-sm">
-                          <button
-                            className="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                            aria-label="Delete"
-                            onClick={() => onDelete(user._id)}
-                          >
-                            <svg
-                              className="w-5 h-5"
-                              aria-hidden="true"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
+                  feedbacks?.data
+                    .slice(startIndex, endIndex)
+                    .map((feedback) => (
+                      <tr
+                        key={feedback._id}
+                        className={`${
+                          isDarkMode ? "text-gray-400" : "text-gray-700"
+                        }`}
+                      >
+                        <td className="px-4 py-3 text-sm">
+                          {feedback.message}
+                        </td>
+                        <td className="px-4 py-3 text-sm">
+                          <div className="flex items-center space-x-4 text-sm">
+                            <button
+                              className="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                              aria-label="Delete"
+                              onClick={() => onDelete(feedback._id)}
                             >
-                              <path
-                                fillRule="evenodd"
-                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                              <svg
+                                className="w-5 h-5"
+                                aria-hidden="true"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
                 ) : (
                   <tr>
                     <td
@@ -211,4 +217,4 @@ const ManageUsers = () => {
   );
 };
 
-export default ManageUsers;
+export default ManageFeedback;

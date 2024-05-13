@@ -1,17 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDarkMode } from "../../../shared/darkModeContext";
-import { useGetAllCategoriesQuery } from "../api/categoriesApi";
+import {
+  useDeleteCategoryMutation,
+  useGetAllCategoriesQuery,
+} from "../api/categoriesApi";
 
 const ManageCategories = () => {
   const { isDarkMode, initializeDarkMode } = useDarkMode();
   const [currentPage, setCurrentPage] = useState(1);
   const { data: categories, isLoading, isSuccess } = useGetAllCategoriesQuery();
-  console.log(categories);
+  const [deleteCategory] = useDeleteCategoryMutation();
+
   const itemsPerPage = 5;
 
   const onDelete = async (id) => {
-    console.log("hello");
+    try {
+      await deleteCategory(id).unwrap();
+      window.location.reload();
+    } catch (error) {
+      console.error("Error deleting:", error);
+    }
   };
 
   useEffect(() => {
@@ -93,7 +102,7 @@ const ManageCategories = () => {
                     .slice(startIndex, endIndex)
                     .map((category) => (
                       <tr
-                        key={category.id}
+                        key={category._id}
                         className={`${
                           isDarkMode ? "text-gray-400" : "text-gray-700"
                         }`}

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDarkMode } from "../shared/darkModeContext";
 import { logout } from "../features/authentication/slice/authSlice";
 import { useDispatch } from "react-redux";
+import profile from "../assets/avatar.jpeg";
 
 const Header = ({ toggleSideMenu }) => {
   const { isDarkMode, toggleDarkMode, initializeDarkMode } = useDarkMode();
@@ -105,7 +106,7 @@ const Header = ({ toggleSideMenu }) => {
             >
               <img
                 className="object-cover w-8 h-8 rounded-full"
-                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHByb2ZpbGUlMjBwaWN0dXJlc3xlbnwwfHwwfHx8MA%3D%3D"
+                src={profile}
                 alt="no"
                 aria-hidden="true"
               />

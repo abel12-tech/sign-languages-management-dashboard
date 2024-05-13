@@ -2,8 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getTokenFromCookies } from "../../../shared/getToken.mjs";
 import { BASE_URL } from "../../../constants";
 
-export const usersApi = createApi({
-  reducerPath: "usersApi",
+export const feedbackApi = createApi({
+  reducerPath: "feedbackApi",
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
     prepareHeaders: async (headers) => {
@@ -15,25 +15,17 @@ export const usersApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getAllUsers: builder.query({
-      query: () => "/users",
+    getFeedbacks: builder.query({
+      query: () => "/feedback/",
       method: "GET",
     }),
-    getUserById: builder.query({
-      query: (id) => `/users/${id}`,
-      method: "GET",
-    }),
-    deleteUser: builder.mutation({
+    deleteFeedback: builder.mutation({
       query: (id) => ({
-        url: `/users/${id}`,
+        url: `/feedback/${id}`,
         method: "DELETE",
       }),
     }),
   }),
 });
 
-export const {
-  useGetAllUsersQuery,
-  useGetUserByIdQuery,
-  useDeleteUserMutation,
-} = usersApi;
+export const { useGetFeedbacksQuery, useDeleteFeedbackMutation } = feedbackApi;

@@ -14,6 +14,7 @@ import ManageContributedSigns from "./features/manage-signs/pages/ManageContribu
 import ManageSignsAddedByAdmin from "./features/manage-signs/pages/ManageSignsAddedByAdmin";
 import UpdateSigns from "./features/manage-signs/pages/UpdateSigns";
 import UpdateCategory from "./features/manage-categories/pages/UpdateCategory";
+import ManageFeedback from "./features/manage-feedback/pages/ManageFeedback";
 
 const App = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -25,6 +26,18 @@ const App = () => {
           isAuthenticated ? (
             <Layout>
               <MainContent />
+            </Layout>
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route
+        path="/manage-feedback"
+        element={
+          isAuthenticated ? (
+            <Layout>
+              <ManageFeedback />
             </Layout>
           ) : (
             <Navigate to="/login" replace />

@@ -59,6 +59,12 @@ export const signsApi = createApi({
         body: id,
       }),
     }),
+    deleteSign: builder.mutation({
+      query: (id) => ({
+        url: `/signs/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -71,4 +77,5 @@ export const {
   useUpdateSignMutation,
   useApproveSignMutation,
   useRejectSignMutation,
+  useDeleteSignMutation,
 } = signsApi;

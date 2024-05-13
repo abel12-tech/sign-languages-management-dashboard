@@ -9,6 +9,7 @@ import authSliceReducer, {
 import { dataApi } from "./features/dashboard-summary/api/dataApi";
 import { signsApi } from "./features/manage-signs/api/signsApi";
 import { categoriesApi } from "./features/manage-categories/api/categoriesApi";
+import { feedbackApi } from "./features/manage-feedback/api/feedbackApi";
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
     [dataApi.reducerPath]: dataApi.reducer,
     [signsApi.reducerPath]: signsApi.reducer,
     [categoriesApi.reducerPath]: categoriesApi.reducer,
+    [feedbackApi.reducerPath]: feedbackApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -27,7 +29,8 @@ export const store = configureStore({
       contributionsApi.middleware,
       dataApi.middleware,
       signsApi.middleware,
-      categoriesApi.middleware
+      categoriesApi.middleware,
+      feedbackApi.middleware
     ),
   devTools: true,
 });

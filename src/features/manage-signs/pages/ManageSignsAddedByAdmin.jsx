@@ -1,25 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDarkMode } from "../../../shared/darkModeContext";
-import { useGetSignAddedByAdminQuery } from "../api/signsApi";
+import {
+  useDeleteSignMutation,
+  useGetSignAddedByAdminQuery,
+} from "../api/signsApi";
 
 const ManageSignsAddedByAdmin = () => {
   const { isDarkMode, initializeDarkMode } = useDarkMode();
   const [currentPage, setCurrentPage] = useState(1);
   const { data: signs, isLoading, isSuccess } = useGetSignAddedByAdminQuery();
-  
+  const [deleteSign] = useDeleteSignMutation();
 
   const itemsPerPage = 5;
 
   const onDelete = async (id) => {
-    console.log("hello");
+    try {
+      await deleteSign(id).unwrap();
+      window.location.reload();
+    } catch (error) {
+      console.error("Error deleting:", error);
+    }
   };
 
   useEffect(() => {
     initializeDarkMode();
   }, [initializeDarkMode]);
 
-  const totalPages = Math.ceil(signs?.data.length/ itemsPerPage) || 1;
+  const totalPages = Math.ceil(signs?.data.length / itemsPerPage) || 1;
   const goToPreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prevPage) => prevPage - 1);
@@ -39,7 +47,9 @@ const ManageSignsAddedByAdmin = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, signs?.data.length);
 
-  const showingText = `Showing ${startIndex + 1}-${endIndex} of ${signs?.data.length}`;
+  const showingText = `Showing ${startIndex + 1}-${endIndex} of ${
+    signs?.data.length
+  }`;
 
   return (
     <div

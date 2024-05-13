@@ -1,21 +1,57 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDarkMode } from "../../../shared/darkModeContext";
+import {
+  useUpdateCategoryMutation,
+  useGetCategoryByIdQuery,
+} from "../api/categoriesApi";
+import { storage } from "../../../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { v4 } from "uuid";
 
 const UpdateCategory = () => {
+  const { id } = useParams();
   const { isDarkMode, initializeDarkMode } = useDarkMode();
-  const [adding, setAdding] = useState(false);
-  const [category, setCategory] = useState("");
-  const [description, setDescription] = useState("");
   const navigate = useNavigate();
+  const [updating, setUpdating] = useState(false);
+  const [category, setCategory] = useState("");
+  const [image, setImage] = useState(null);
+  const { data: categoryData, isLoading } = useGetCategoryByIdQuery(id);
+  const [updateCategory] = useUpdateCategoryMutation();
 
   useEffect(() => {
     initializeDarkMode();
-  }, [initializeDarkMode]);
+
+    if (!isLoading && categoryData) {
+      setCategory(categoryData?.data.name);
+    }
+  }, [initializeDarkMode, isLoading, categoryData]);
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setAdding(true);
+    setUpdating(true);
+
+    try {
+      let imageUrl = categoryData.image;
+
+      if (image) {
+        const imageRef = ref(storage, `Signs/${image.name + v4()}`);
+        await uploadBytes(imageRef, image);
+        imageUrl = await getDownloadURL(imageRef);
+      }
+
+      await updateCategory({ _id: id, name: category, image: imageUrl });
+      setUpdating(false);
+      navigate("/manage-categories");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating category:", error);
+      setUpdating(false);
+    }
   };
 
   return (
@@ -65,25 +101,24 @@ const UpdateCategory = () => {
                       isDarkMode ? "text-gray-400" : "text-gray-700"
                     }`}
                   >
-                    Description
+                    Image
                   </span>
-                  <textarea
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
                     className={`${
                       isDarkMode
                         ? "border-gray-600 bg-gray-700 text-gray-300 focus:shadow-outline-gray"
                         : "border-2 outline-none focus:border-gray-200"
                     } focus:border-gray-400 focus:outline-none focus:shadow-outline-purple sm:col-span-2 text-sm rounded-lg outline-none block w-full p-2.5`}
-                    rows={3}
-                    placeholder="description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
                   />
                 </label>
                 <button
                   type="submit"
                   className="mt-4 bg-[#9333EA] hover:bg-[#c190ee] text-white font-semibold py-2 px-4 rounded"
                 >
-                  {adding ? "adding ..." : "Add Category"}
+                  {updating ? "Updating..." : "Update Category"}
                 </button>
               </div>
             </form>

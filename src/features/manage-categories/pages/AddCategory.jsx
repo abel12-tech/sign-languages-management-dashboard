@@ -35,7 +35,7 @@ const AddCategory = () => {
       });
 
       setAdding(false);
-      navigate("/navigate-to-some-route"); 
+      navigate("/manage-category");
     } catch (error) {
       console.error("Error adding category:", error);
       setAdding(false);
